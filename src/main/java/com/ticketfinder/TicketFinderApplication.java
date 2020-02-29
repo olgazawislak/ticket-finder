@@ -1,4 +1,4 @@
-package com.example.TicketFinder;
+package com.ticketfinder;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TicketFinderApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(TicketFinderApplication.class, args);
 	}
-
 }

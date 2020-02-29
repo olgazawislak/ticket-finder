@@ -1,4 +1,4 @@
-package com.example.TicketFinder;
+package com.ticketfinder;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

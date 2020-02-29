@@ -1,10 +1,8 @@
-package com.example.TicketFinder;
+package com.ticketfinder;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
-public interface ConcertRepository extends MongoRepository<Concert, UUID> {
+public interface ConcertRepository extends MongoRepository<Concert, String> {
 }

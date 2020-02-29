@@ -1,4 +1,4 @@
-package com.example.TicketFinder;
+package com.ticketfinder;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

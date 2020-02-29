@@ -1,19 +1,18 @@
-package com.example.TicketFinder;
+package com.ticketfinder;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 class Concert {
-    private String nameOfConcert;
-    private LocalDate date;
-    private String placeOfConcert;
+    private String name;
+    private LocalDateTime date;
+    private String address;
     private String description;
-
-
 }

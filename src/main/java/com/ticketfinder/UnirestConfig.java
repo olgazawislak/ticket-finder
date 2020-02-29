@@ -1,4 +1,4 @@
-package com.example.TicketFinder;
+package com.ticketfinder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.ObjectMapper;
