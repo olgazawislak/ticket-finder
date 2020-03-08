@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.ticketfinder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.ObjectMapper;
@@ -10,9 +10,12 @@ import javax.annotation.PostConstruct;
 
 @Configuration
 class UnirestConfig {
+    private com.fasterxml.jackson.databind.ObjectMapper mapper;
 
     @Autowired
-    private com.fasterxml.jackson.databind.ObjectMapper mapper;
+    public UnirestConfig(com.fasterxml.jackson.databind.ObjectMapper mapper) {
+        this.mapper = mapper;
+    }
 
     @PostConstruct
     public void postConstruct() {
