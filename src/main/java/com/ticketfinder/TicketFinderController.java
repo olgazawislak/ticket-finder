@@ -29,7 +29,7 @@ public class TicketFinderController {
 
     @PostMapping("concerts")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void postConcert(Concert concert) {
+    public void postConcert(@RequestBody Concert concert) {
         concertRepository.insert(concert);
     }
 

@@ -72,7 +72,8 @@ public class TicketFinderTest {
                 "Nowa Huta", "OK");
         String concertAsString = objectMapper.writeValueAsString(concert);
 
-        mockMvc.perform(post("/concerts").content(concertAsString))
+        mockMvc.perform(post("/concerts").content(concertAsString)
+                .header("Content-Type", "application/json"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").doesNotExist());
     }
