@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,4 +18,5 @@ class Concert {
     private LocalDateTime date;
     private String address;
     private String description;
+    private List<Seat> seats;
 }
