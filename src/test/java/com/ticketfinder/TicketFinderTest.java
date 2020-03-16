@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,14 +29,12 @@ public class TicketFinderTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private TicketFinderController ticketFinderController;
-
     @SneakyThrows
     @Test
     void getAllConcertTest() {
+        Seat seat = Seat.createSeat("normal", 350);
         Concert concert = new Concert("0", "Bon Jovi", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Cracow", "Great Concert");
+                "Cracow", "Great Concert", Collections.singletonList(seat));
         concertRepository.save(concert);
 
         String contentAsString = mockMvc.perform(get("/concerts"))
@@ -51,8 +50,9 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void getConcertByIdTest() {
+        Seat seat = Seat.createSeat("normal", 350);
         Concert concert = new Concert("1", "Abba", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Warsaw", "OK");
+                "Warsaw", "OK", Collections.singletonList(seat));
         concertRepository.save(concert);
 
         String contentAsString = mockMvc.perform(get("/concerts/1"))
@@ -68,11 +68,13 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void postConcertTest() {
+        Seat seat = Seat.createSeat("normal", 350);
         Concert concert = new Concert("2", "Kat", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Nowa Huta", "OK");
+                "Nowa Huta", "OK", Collections.singletonList(seat));
         String concertAsString = objectMapper.writeValueAsString(concert);
 
-        mockMvc.perform(post("/concerts").content(concertAsString))
+        mockMvc.perform(post("/concerts").content(concertAsString)
+                .header("Content-Type", "application/json"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").doesNotExist());
     }
