@@ -32,5 +32,4 @@ public class TicketFinderController {
     public void postConcert(@RequestBody Concert concert) {
         concertRepository.insert(concert);
     }
-
 }

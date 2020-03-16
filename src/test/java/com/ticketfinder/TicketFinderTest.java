@@ -29,9 +29,6 @@ public class TicketFinderTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private TicketFinderController ticketFinderController;
-
     @SneakyThrows
     @Test
     void getAllConcertTest() {
