@@ -1,16 +1,15 @@
 package com.ticketfinder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -57,7 +56,7 @@ public class TicketFinderTest {
                 "Warsaw", "OK", Collections.singletonList(seat));
         concertRepository.save(concert);
 
-        String contentAsString = mockMvc.perform(get("/concerts/1"))
+        String contentAsString = mockMvc.perform(get("/concerts/"+ concert.getId()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -84,22 +83,21 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void postConcertReservationTest() {
-        Reservation reservation = new Reservation("Adam", "Malysz");
+        User user = new User("Adam", "Malysz");
         Seat seat = Seat.createSeat("GA", 400);
         Concert concert = new Concert("3", "Katy Perry", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
                 "Alaska", "Nice Ice", Collections.singletonList(seat));
-        String reservationAsString = objectMapper.writeValueAsString(reservation);
-
+        String reservationAsString = objectMapper.writeValueAsString(user);
         concertRepository.save(concert);
 
-        mockMvc.perform(post("/concerts/3/seats/" + seat.getId())
+        mockMvc.perform(post("/concerts/" + concert.getId() + "/seats/" + seat.getId())
                 .content(reservationAsString)
                 .header("Content-Type", "application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
 
-        Seat actualSeat = concertRepository.findById("3").orElseThrow(NotFoundException::new).findSeat(seat.getId());
+        Seat actualSeat = concertRepository.findById(concert.getId()).orElseThrow(NotFoundException::new).findSeat(seat.getId());
         assertThat(actualSeat.isReserved()).isEqualTo(true);
-        assertThat(actualSeat.getReservation()).isEqualToComparingFieldByField(reservation);
+        assertThat(actualSeat.getUser()).isEqualToComparingFieldByField(user);
     }
 }
