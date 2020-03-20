@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class TicketFinderController {
@@ -19,7 +20,7 @@ public class TicketFinderController {
     @GetMapping("concerts/{id}")
     public Concert getConcert(@PathVariable String id) {
         return concertRepository.findById(id)
-                .orElseThrow(ConcertNotFoundException::new);
+                .orElseThrow(NotFoundException::new);
     }
 
     @GetMapping("concerts")
@@ -31,5 +32,14 @@ public class TicketFinderController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public void postConcert(@RequestBody Concert concert) {
         concertRepository.insert(concert);
+    }
+
+    @PostMapping("concerts/{concertId}/seats/{seatId}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public void postConcertReservation(@PathVariable String concertId, @PathVariable UUID seatId, @RequestBody Reservation reservation) {
+        Concert concert = concertRepository.findById(concertId)
+                .orElseThrow(NotFoundException::new);
+        concert.findSeat(seatId).reserve(reservation);
+        concertRepository.save(concert);
     }
 }

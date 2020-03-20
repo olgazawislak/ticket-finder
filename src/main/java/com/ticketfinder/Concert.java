@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -19,4 +20,10 @@ class Concert {
     private String address;
     private String description;
     private List<Seat> seats;
+
+    public Seat findSeat(UUID id) {
+        return getSeats().stream()
+                .filter(seat -> seat.getId().equals(id))
+                .findFirst().orElseThrow(NotFoundException::new);
+    }
 }

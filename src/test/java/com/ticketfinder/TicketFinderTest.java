@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -77,5 +79,27 @@ public class TicketFinderTest {
                 .header("Content-Type", "application/json"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @SneakyThrows
+    @Test
+    void postConcertReservationTest() {
+        Reservation reservation = new Reservation("Adam", "Malysz");
+        Seat seat = Seat.createSeat("GA", 400);
+        Concert concert = new Concert("3", "Katy Perry", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                "Alaska", "Nice Ice", Collections.singletonList(seat));
+        String reservationAsString = objectMapper.writeValueAsString(reservation);
+
+        concertRepository.save(concert);
+
+        mockMvc.perform(post("/concerts/3/seats/" + seat.getId())
+                .content(reservationAsString)
+                .header("Content-Type", "application/json"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
+
+        Seat actualSeat = concertRepository.findById("3").orElseThrow(NotFoundException::new).findSeat(seat.getId());
+        assertThat(actualSeat.isReserved()).isEqualTo(true);
+        assertThat(actualSeat.getReservation()).isEqualToComparingFieldByField(reservation);
     }
 }
