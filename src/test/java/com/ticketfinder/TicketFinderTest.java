@@ -34,8 +34,12 @@ public class TicketFinderTest {
     @Test
     void getAllConcertTest() {
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert("0", "Bon Jovi", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Cracow", "Great Concert", Collections.singletonList(seat));
+        Concert concert = new Concert("0",
+                "Bon Jovi",
+                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                "Cracow",
+                "Great Concert",
+                Collections.singletonList(seat));
         concertRepository.save(concert);
 
         String contentAsString = mockMvc.perform(get("/concerts"))
@@ -52,8 +56,12 @@ public class TicketFinderTest {
     @Test
     void getConcertByIdTest() {
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert("1", "Abba", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Warsaw", "OK", Collections.singletonList(seat));
+        Concert concert = new Concert("1",
+                "Abba",
+                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                "Warsaw",
+                "OK",
+                Collections.singletonList(seat));
         concertRepository.save(concert);
 
         String contentAsString = mockMvc.perform(get("/concerts/"+ concert.getId()))
@@ -70,8 +78,12 @@ public class TicketFinderTest {
     @Test
     void postConcertTest() {
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert("2", "Kat", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Nowa Huta", "OK", Collections.singletonList(seat));
+        Concert concert = new Concert("2",
+                "Kat",
+                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                "Nowa Huta",
+                "OK",
+                Collections.singletonList(seat));
         String concertAsString = objectMapper.writeValueAsString(concert);
 
         mockMvc.perform(post("/concerts").content(concertAsString)
@@ -85,8 +97,12 @@ public class TicketFinderTest {
     void postConcertReservationTest() {
         User user = new User("Adam", "Malysz");
         Seat seat = Seat.createSeat("GA", 400);
-        Concert concert = new Concert("3", "Katy Perry", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Alaska", "Nice Ice", Collections.singletonList(seat));
+        Concert concert = new Concert("3",
+                "Katy Perry",
+                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                "Alaska",
+                "Nice Ice",
+                Collections.singletonList(seat));
         String reservationAsString = objectMapper.writeValueAsString(user);
         concertRepository.save(concert);
 
@@ -96,7 +112,9 @@ public class TicketFinderTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
 
-        Seat actualSeat = concertRepository.findById(concert.getId()).orElseThrow(NotFoundException::new).findSeat(seat.getId());
+        Seat actualSeat = concertRepository.findById(concert.getId())
+                .orElseThrow(NotFoundException::new)
+                .findSeat(seat.getId());
         assertThat(actualSeat.isReserved()).isEqualTo(true);
         assertThat(actualSeat.getUser()).isEqualToComparingFieldByField(user);
     }
