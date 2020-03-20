@@ -15,16 +15,14 @@ public class Seat {
     private String description;
     private int price;
     private boolean reserved;
-    private String name;
-    private String surname;
+    private User user;
 
     public static Seat createSeat(String description, int price) {
-        return new Seat(UUID.randomUUID(), description, price, false, null, null);
+        return new Seat(UUID.randomUUID(), description, price, false, new User(null, null));
     }
 
-    public void reservation(String name, String surname) {
+    public void reserve(User user) {
         setReserved(true);
-        setName(name);
-        setSurname(surname);
+        setUser(user);
     }
 }
