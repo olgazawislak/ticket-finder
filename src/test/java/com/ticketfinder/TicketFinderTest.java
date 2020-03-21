@@ -82,7 +82,7 @@ public class TicketFinderTest {
     @Test
     void postConcertTest() {
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert(faker.idNumber().toString(),
+        Concert concert = new Concert(UUID.randomUUID().toString(),
                 faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
                 "Nowa Huta",
