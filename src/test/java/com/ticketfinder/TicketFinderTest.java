@@ -1,6 +1,7 @@
 package com.ticketfinder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.javafaker.Faker;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -33,11 +34,12 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void getAllConcertTest() {
+        Faker faker = new Faker();
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert("0",
-                "Bon Jovi",
+        Concert concert = new Concert(faker.idNumber().toString(),
+                faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Cracow",
+                faker.address().toString(),
                 "Great Concert",
                 Collections.singletonList(seat));
         concertRepository.save(concert);
@@ -55,16 +57,17 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void getConcertByIdTest() {
+        Faker faker = new Faker();
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert("1",
-                "Abba",
+        Concert concert = new Concert(faker.idNumber().toString(),
+                faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Warsaw",
+                faker.address().toString(),
                 "OK",
                 Collections.singletonList(seat));
         concertRepository.save(concert);
 
-        String contentAsString = mockMvc.perform(get("/concerts/"+ concert.getId()))
+        String contentAsString = mockMvc.perform(get("/concerts/" + concert.getId()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -77,9 +80,10 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void postConcertTest() {
+        Faker faker = new Faker();
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert("2",
-                "Kat",
+        Concert concert = new Concert(faker.idNumber().toString(),
+                faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
                 "Nowa Huta",
                 "OK",
@@ -95,12 +99,13 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void postConcertReservationTest() {
-        User user = new User("Adam", "Malysz");
+        Faker faker = new Faker();
+        User user = new User(faker.name().firstName(), faker.name().lastName());
         Seat seat = Seat.createSeat("GA", 400);
-        Concert concert = new Concert("3",
-                "Katy Perry",
+        Concert concert = new Concert(faker.idNumber().toString(),
+                faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Alaska",
+                faker.address().toString(),
                 "Nice Ice",
                 Collections.singletonList(seat));
         String reservationAsString = objectMapper.writeValueAsString(user);

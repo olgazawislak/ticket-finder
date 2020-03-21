@@ -32,6 +32,7 @@ dependencies {
 	compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	compile group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
 }
 
 test {
