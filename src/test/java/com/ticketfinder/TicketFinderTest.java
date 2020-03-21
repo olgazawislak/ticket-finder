@@ -1,9 +1,11 @@
 package com.ticketfinder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.javafaker.Faker;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.UUID;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TicketFinderTest {
 
+    private Faker faker = new Faker();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -34,10 +38,10 @@ public class TicketFinderTest {
     @Test
     void getAllConcertTest() {
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert("0",
-                "Bon Jovi",
+        Concert concert = new Concert(UUID.randomUUID().toString(),
+                faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Cracow",
+                faker.address().toString(),
                 "Great Concert",
                 Collections.singletonList(seat));
         concertRepository.save(concert);
@@ -56,15 +60,15 @@ public class TicketFinderTest {
     @Test
     void getConcertByIdTest() {
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert("1",
-                "Abba",
+        Concert concert = new Concert(UUID.randomUUID().toString(),
+                faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Warsaw",
+                faker.address().toString(),
                 "OK",
                 Collections.singletonList(seat));
         concertRepository.save(concert);
 
-        String contentAsString = mockMvc.perform(get("/concerts/"+ concert.getId()))
+        String contentAsString = mockMvc.perform(get("/concerts/" + concert.getId()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -78,8 +82,8 @@ public class TicketFinderTest {
     @Test
     void postConcertTest() {
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert("2",
-                "Kat",
+        Concert concert = new Concert(UUID.randomUUID().toString(),
+                faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
                 "Nowa Huta",
                 "OK",
@@ -95,12 +99,12 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void postConcertReservationTest() {
-        User user = new User("Adam", "Malysz");
+        User user = new User(faker.name().firstName(), faker.name().lastName());
         Seat seat = Seat.createSeat("GA", 400);
-        Concert concert = new Concert("3",
-                "Katy Perry",
+        Concert concert = new Concert(UUID.randomUUID().toString(),
+                faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Alaska",
+                faker.address().toString(),
                 "Nice Ice",
                 Collections.singletonList(seat));
         String reservationAsString = objectMapper.writeValueAsString(user);
