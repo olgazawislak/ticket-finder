@@ -5,6 +5,7 @@ import com.github.javafaker.Faker;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.UUID;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TicketFinderTest {
 
+    private Faker faker = new Faker();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -34,9 +37,8 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void getAllConcertTest() {
-        Faker faker = new Faker();
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert(faker.idNumber().toString(),
+        Concert concert = new Concert(UUID.randomUUID().toString(),
                 faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
                 faker.address().toString(),
@@ -57,9 +59,8 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void getConcertByIdTest() {
-        Faker faker = new Faker();
         Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert(faker.idNumber().toString(),
+        Concert concert = new Concert(UUID.randomUUID().toString(),
                 faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
                 faker.address().toString(),
@@ -80,7 +81,6 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void postConcertTest() {
-        Faker faker = new Faker();
         Seat seat = Seat.createSeat("normal", 350);
         Concert concert = new Concert(faker.idNumber().toString(),
                 faker.artist().toString(),
@@ -99,10 +99,9 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void postConcertReservationTest() {
-        Faker faker = new Faker();
         User user = new User(faker.name().firstName(), faker.name().lastName());
         Seat seat = Seat.createSeat("GA", 400);
-        Concert concert = new Concert(faker.idNumber().toString(),
+        Concert concert = new Concert(UUID.randomUUID().toString(),
                 faker.artist().toString(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
                 faker.address().toString(),
