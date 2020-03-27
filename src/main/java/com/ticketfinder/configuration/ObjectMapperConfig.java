@@ -1,4 +1,4 @@
-package com.ticketfinder;
+package com.ticketfinder.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -8,10 +8,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-
 @Configuration
-class ObjectMapperConfiguration {
+class ObjectMapperConfig {
 
     @Bean
     ObjectMapper objectMapper() {
