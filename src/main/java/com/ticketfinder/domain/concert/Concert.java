@@ -1,5 +1,6 @@
-package com.ticketfinder;
+package com.ticketfinder.domain.concert;
 
+import com.ticketfinder.exception.NotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +12,7 @@ import org.springframework.data.annotation.Id;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-class Concert {
+public class Concert {
     @Id
     private String id;
     private String name;

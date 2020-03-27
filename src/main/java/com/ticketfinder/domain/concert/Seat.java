@@ -1,10 +1,9 @@
-package com.ticketfinder;
+package com.ticketfinder.domain.concert;
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -15,14 +14,14 @@ public class Seat {
     private String description;
     private int price;
     private boolean reserved;
-    private User user;
+    private UserData userData;
 
     public static Seat createSeat(String description, int price) {
-        return new Seat(UUID.randomUUID(), description, price, false, new User(null, null));
+        return new Seat(UUID.randomUUID(), description, price, false, new UserData(null, null));
     }
 
-    public void reserve(User user) {
+    public void reserve(UserData userData) {
         setReserved(true);
-        setUser(user);
+        setUserData(userData);
     }
 }
