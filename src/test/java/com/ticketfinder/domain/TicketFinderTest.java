@@ -6,7 +6,7 @@ import com.ticketfinder.exception.NotFoundException;
 import com.ticketfinder.domain.concert.Concert;
 import com.ticketfinder.domain.concert.ConcertRepository;
 import com.ticketfinder.domain.concert.Seat;
-import com.ticketfinder.domain.concert.UserData;
+import com.ticketfinder.domain.concert.ConcertParticipant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -104,7 +104,7 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void postConcertReservationTest() {
-        UserData userData = new UserData(faker.name().firstName(), faker.name().lastName());
+        ConcertParticipant concertParticipant = new ConcertParticipant(faker.name().firstName(), faker.name().lastName());
         Seat seat = Seat.createSeat("GA", 400);
         Concert concert = new Concert(UUID.randomUUID().toString(),
                 faker.artist().toString(),
@@ -112,7 +112,7 @@ public class TicketFinderTest {
                 faker.address().toString(),
                 "Nice Ice",
                 Collections.singletonList(seat));
-        String reservationAsString = objectMapper.writeValueAsString(userData);
+        String reservationAsString = objectMapper.writeValueAsString(concertParticipant);
         concertRepository.save(concert);
 
         mockMvc.perform(post("/concerts/" + concert.getId() + "/seats/" + seat.getId())
@@ -125,6 +125,6 @@ public class TicketFinderTest {
                 .orElseThrow(NotFoundException::new)
                 .findSeat(seat.getId());
         assertThat(actualSeat.isReserved()).isEqualTo(true);
-        assertThat(actualSeat.getUserData()).isEqualToComparingFieldByField(userData);
+        assertThat(actualSeat.getConcertParticipant()).isEqualToComparingFieldByField(concertParticipant);
     }
 }

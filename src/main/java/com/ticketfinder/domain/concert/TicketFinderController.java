@@ -37,10 +37,12 @@ public class TicketFinderController {
 
     @PostMapping("{concertId}/seats/{seatId}")
     @ResponseStatus(code = HttpStatus.OK)
-    public void postConcertReservation(@PathVariable String concertId, @PathVariable UUID seatId, @RequestBody UserData userData) {
+    public void postConcertReservation(@PathVariable String concertId,
+                                       @PathVariable UUID seatId,
+                                       @RequestBody ConcertParticipant concertParticipant) {
         Concert concert = concertRepository.findById(concertId)
                 .orElseThrow(NotFoundException::new);
-        concert.findSeat(seatId).reserve(userData);
+        concert.findSeat(seatId).reserve(concertParticipant);
         concertRepository.save(concert);
     }
 }

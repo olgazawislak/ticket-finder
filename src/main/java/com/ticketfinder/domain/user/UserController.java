@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RegistrationController {
+public class UserController {
 
     private UserRepository userRepository;
 
     @Autowired
-    public RegistrationController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserData {
+public class ConcertParticipant {
     private String name;
     private String surname;
 }
