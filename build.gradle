@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.2.4.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
+	id "io.freefair.lombok" version "5.0.0-rc6"
 }
 
 group = 'com.example'
@@ -19,20 +20,22 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-	testImplementation("org.assertj:assertj-core:3.15.0")
-	testCompile group: 'org.mockito', name: 'mockito-core', version: '3.2.4'
+	compile 'org.springframework.boot:spring-boot-starter-web'
 	compile 'org.springframework.boot:spring-boot-starter-data-mongodb:2.2.2.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.3.0.RELEASE'
+
+	compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
 	compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-	compile group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
+	compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
+
+	testCompile('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testCompile("org.assertj:assertj-core:3.15.0")
+	testCompile group: 'org.mockito', name: 'mockito-core', version: '3.2.4'
+	testCompile group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
 }
 
 test {

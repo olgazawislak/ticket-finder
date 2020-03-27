@@ -1,4 +1,4 @@
-package com.ticketfinder;
+package com.ticketfinder.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
