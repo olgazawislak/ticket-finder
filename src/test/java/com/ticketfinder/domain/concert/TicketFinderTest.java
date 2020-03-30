@@ -1,12 +1,8 @@
-package com.ticketfinder.domain;
+package com.ticketfinder.domain.concert;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.ticketfinder.exception.NotFoundException;
-import com.ticketfinder.domain.concert.Concert;
-import com.ticketfinder.domain.concert.ConcertRepository;
-import com.ticketfinder.domain.concert.Seat;
-import com.ticketfinder.domain.concert.ConcertParticipant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
