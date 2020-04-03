@@ -36,7 +36,7 @@ public class UserController {
     public void logIn(@RequestBody CreateUserCommand createUserCommand ) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashPassword = userRepository.findById(createUserCommand.getEmail())
-                .orElseThrow(NotFoundException::new)
+                .orElseThrow(() -> new NotFoundException("User doesn't exist"))
                 .getHashPassword();
 
         if(!passwordEncoder.matches(createUserCommand.getPassword(), hashPassword)) {

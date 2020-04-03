@@ -21,7 +21,7 @@ public class TicketFinderController {
     @GetMapping("{id}")
     public Concert getConcert(@PathVariable String id) {
         return concertRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Concert doesn't exist"));
     }
 
     @GetMapping()
@@ -41,7 +41,7 @@ public class TicketFinderController {
                                        @PathVariable UUID seatId,
                                        @RequestBody ConcertParticipant concertParticipant) {
         Concert concert = concertRepository.findById(concertId)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Concert doesn't exist"));
         concert.findSeat(seatId).reserve(concertParticipant);
         concertRepository.save(concert);
     }
