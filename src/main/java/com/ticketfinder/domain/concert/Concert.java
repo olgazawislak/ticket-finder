@@ -24,6 +24,6 @@ public class Concert {
     public Seat findSeat(UUID id) {
         return getSeats().stream()
                 .filter(seat -> seat.getId().equals(id))
-                .findFirst().orElseThrow(NotFoundException::new);
+                .findFirst().orElseThrow(() -> new NotFoundException("Seat doesn't exist"));
     }
 }

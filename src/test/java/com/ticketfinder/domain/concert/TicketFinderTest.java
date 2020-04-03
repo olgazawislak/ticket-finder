@@ -118,7 +118,7 @@ public class TicketFinderTest {
                 .andExpect(jsonPath("$").doesNotExist());
 
         Seat actualSeat = concertRepository.findById(concert.getId())
-                .orElseThrow(NotFoundException::new)
+                .orElseThrow(() -> new NotFoundException("Concert doesn't exist"))
                 .findSeat(seat.getId());
         assertThat(actualSeat.isReserved()).isEqualTo(true);
         assertThat(actualSeat.getConcertParticipant()).isEqualToComparingFieldByField(concertParticipant);
