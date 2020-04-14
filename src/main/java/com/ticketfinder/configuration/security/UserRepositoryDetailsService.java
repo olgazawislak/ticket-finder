@@ -1,16 +1,18 @@
-package com.ticketfinder.domain.user;
+package com.ticketfinder.configuration.security;
 
+import com.ticketfinder.domain.user.User;
+import com.ticketfinder.domain.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserRepositoryDetailsService implements UserDetailsService {
 
     private UserRepository userRepository;
 
     @Autowired
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserRepositoryDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

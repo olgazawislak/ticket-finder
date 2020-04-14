@@ -1,6 +1,5 @@
 package com.ticketfinder.configuration.security;
 
-import com.ticketfinder.domain.user.UserDetailsServiceImpl;
 import com.ticketfinder.domain.user.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return new UserDetailsServiceImpl(userRepository);
+        return new UserRepositoryDetailsService(userRepository);
     }
 
     @Bean
