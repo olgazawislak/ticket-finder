@@ -19,6 +19,7 @@ public class Concert {
     private LocalDateTime date;
     private String address;
     private String description;
+    private List<String> tags;
     private List<Seat> seats;
 
     public Seat findSeat(UUID id) {

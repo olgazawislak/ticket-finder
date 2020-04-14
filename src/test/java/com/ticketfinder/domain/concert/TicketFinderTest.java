@@ -42,10 +42,11 @@ public class TicketFinderTest {
     void getAllConcertTest() {
         Seat seat = Seat.createSeat("normal", 350);
         Concert concert = new Concert(UUID.randomUUID().toString(),
-                faker.artist().toString(),
+                faker.artist().name(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                faker.address().toString(),
+                faker.address().fullAddress(),
                 "Great Concert",
+                Collections.singletonList("Rock"),
                 Collections.singletonList(seat));
         concertRepository.save(concert);
 
@@ -64,10 +65,11 @@ public class TicketFinderTest {
     void getConcertByIdTest() {
         Seat seat = Seat.createSeat("normal", 350);
         Concert concert = new Concert(UUID.randomUUID().toString(),
-                faker.artist().toString(),
+                faker.artist().name(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                faker.address().toString(),
+                faker.address().fullAddress(),
                 "OK",
+                Collections.singletonList("Pop"),
                 Collections.singletonList(seat));
         concertRepository.save(concert);
 
@@ -86,10 +88,11 @@ public class TicketFinderTest {
     void postConcertTest() {
         Seat seat = Seat.createSeat("normal", 350);
         Concert concert = new Concert(UUID.randomUUID().toString(),
-                faker.artist().toString(),
+                faker.artist().name(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
                 "Nowa Huta",
                 "OK",
+                Collections.singletonList("Pogo"),
                 Collections.singletonList(seat));
         String concertAsString = objectMapper.writeValueAsString(concert);
 
@@ -105,10 +108,11 @@ public class TicketFinderTest {
         ConcertParticipant concertParticipant = new ConcertParticipant(faker.name().firstName(), faker.name().lastName());
         Seat seat = Seat.createSeat("GA", 400);
         Concert concert = new Concert(UUID.randomUUID().toString(),
-                faker.artist().toString(),
+                faker.artist().name(),
                 LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                faker.address().toString(),
+                faker.address().fullAddress(),
                 "Nice Ice",
+                Collections.singletonList("Ice"),
                 Collections.singletonList(seat));
         String reservationAsString = objectMapper.writeValueAsString(concertParticipant);
         concertRepository.save(concert);

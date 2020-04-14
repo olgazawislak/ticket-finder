@@ -9,12 +9,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.ticketfinder.configuration.security.SecurityConfig.TOKEN_HEADER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class LogInControllerTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -27,30 +29,34 @@ public class UserControllerTest {
 
     @SneakyThrows
     @Test
-    public void createUserTest() {
+    public void logInTest() {
         Faker faker = new Faker();
-        CreateUserCommand createUserCommand = new CreateUserCommand("gooddog@gmail.com",
-                faker.chuckNorris().toString());
+        CreateUserCommand createUserCommand = new CreateUserCommand("baddog@gmail.com",
+                faker.dog().name());
+        userRepository.save(createUserCommand.toUser());
         String createUserCommandAsString = objectMapper.writeValueAsString(createUserCommand);
 
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/login")
                 .content(createUserCommandAsString)
                 .header("Content-Type", "application/json"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk())
+                .andExpect(header().exists(TOKEN_HEADER));
     }
 
     @SneakyThrows
     @Test
-    public void createUserWithExistingEmailTest() {
+    public void wrongPasswordLogInTest() {
         Faker faker = new Faker();
-        CreateUserCommand createUserCommand = new CreateUserCommand("gooddog@gmail.com",
-                faker.artist().toString());
+        CreateUserCommand createUserCommand = new CreateUserCommand("baddog@gmail.com",
+                faker.dog().name());
+        CreateUserCommand wrongCreateUserCommand = new CreateUserCommand("baddog@gmail.com",
+                faker.cat().name());
         userRepository.save(createUserCommand.toUser());
-        String createUserCommandAsString = objectMapper.writeValueAsString(createUserCommand);
+        String wrongCreateUserCommandAsString = objectMapper.writeValueAsString(wrongCreateUserCommand);
 
-        mockMvc.perform(post("/users")
-                .content(createUserCommandAsString)
+        mockMvc.perform(post("/login")
+                .content(wrongCreateUserCommandAsString)
                 .header("Content-Type", "application/json"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isForbidden());
     }
 }

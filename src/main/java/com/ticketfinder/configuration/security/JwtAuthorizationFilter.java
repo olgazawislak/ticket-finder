@@ -1,4 +1,4 @@
-package com.ticketfinder.configuration;
+package com.ticketfinder.configuration.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -9,18 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-//todo based on https://dev.to/keysh/spring-security-with-jwt-3j76
-public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+import static com.ticketfinder.configuration.security.SecurityConfig.JWT_SECRET;
+import static com.ticketfinder.configuration.security.SecurityConfig.TOKEN_HEADER;
 
-    private static final Logger log = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
+public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -30,7 +28,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @SneakyThrows
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) {
-        log.info("doFilterInternal");
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
         if (authentication == null) {
             filterChain.doFilter(request, response);
@@ -42,15 +39,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        log.info("getAuthentication");
-        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
-        if (StringUtils.isNotEmpty(token) && token.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+        String token = request.getHeader(TOKEN_HEADER);
+        if (StringUtils.isNotEmpty(token)) {
 
-            byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
+            byte[] signingKey = JWT_SECRET.getBytes();
 
-            Jws<Claims> parsedToken = Jwts.parser()
+            Jws<Claims> parsedToken = Jwts.parserBuilder()
                     .setSigningKey(signingKey)
-                    .parseClaimsJws(token.replace("Bearer ", ""));
+                    .build()
+                    .parseClaimsJws(token);
 
             String username = parsedToken
                     .getBody()
