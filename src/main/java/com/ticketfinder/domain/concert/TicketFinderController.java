@@ -24,11 +24,6 @@ public class TicketFinderController {
                 .orElseThrow(() -> new NotFoundException("Concert doesn't exist"));
     }
 
-//    @GetMapping()
-//    public List<Concert> findConcert() {
-//
-//    }
-
     @GetMapping()
     public List<Concert> getAllConcerts() {
         return concertRepository.findAll();
@@ -50,6 +45,4 @@ public class TicketFinderController {
         concert.findSeat(seatId).reserve(concertParticipant);
         concertRepository.save(concert);
     }
-
-
 }
