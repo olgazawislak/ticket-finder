@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ConcertRepository extends MongoRepository<Concert, String> {
+
 }

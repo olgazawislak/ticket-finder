@@ -7,7 +7,7 @@ For unit tests were used Mockito and for integration tests - MockMVC.
 ## Heroku
 You can find link to Heroku [here](https://ticketfinderapp.herokuapp.com/swagger-ui.html#/).
 
-##Technologies
+## Technologies
 Project is created with:
 - Java 11
 - Spring
