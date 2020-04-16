@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("concerts")
 @RestController
-public class TicketFinderController {
+public class ConcertController {
 
     private ConcertRepository concertRepository;
 
     @Autowired
-    public TicketFinderController(ConcertRepository concertRepository) {
+    public ConcertController(ConcertRepository concertRepository) {
         this.concertRepository = concertRepository;
     }
 
