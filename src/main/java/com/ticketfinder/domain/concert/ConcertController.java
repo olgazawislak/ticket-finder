@@ -3,6 +3,7 @@ package com.ticketfinder.domain.concert;
 import com.ticketfinder.exception.NotFoundException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +45,12 @@ public class ConcertController {
                 .orElseThrow(() -> new NotFoundException("Concert doesn't exist"));
         concert.findSeat(seatId).reserve(concertParticipant);
         concertRepository.save(concert);
+    }
+
+    @GetMapping("tags")
+    public List<Concert> findConcertsByTags(@RequestParam List<String> tags) {
+        return getAllConcerts().stream()
+                .filter(concert -> concert.getTags().containsAll(tags))
+                .collect(Collectors.toList());
     }
 }

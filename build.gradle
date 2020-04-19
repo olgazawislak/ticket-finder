@@ -40,6 +40,7 @@ dependencies {
 	testCompile("org.assertj:assertj-core:3.15.0")
 	testCompile group: 'org.mockito', name: 'mockito-core', version: '3.2.4'
 	testCompile group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.6.2'
 }
 
 test {
