@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static java.util.Collections.EMPTY_LIST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,7 +60,7 @@ public class FindByTagsParameterizedTest {
         MultiValueMap<String, String> tagsMap = new LinkedMultiValueMap<>();
         tagsMap.put("tags", tags);
 
-        Concert concertWithNoTags = new ConcertBuilder().setTags(EMPTY_LIST).build();
+        Concert concertWithNoTags = new ConcertBuilder().setTags(Collections.emptyList()) .build();
         Concert concertWithNoExpectedTags = new ConcertBuilder().setTags(Collections.singletonList("Pop")).build();
         Concert concertWithTags = new ConcertBuilder().setTags(Arrays.asList("Metal", "Pogo")).build();
         Concert concertWithOneTag = new ConcertBuilder().setTags(Collections.singletonList("Metal")).build();
