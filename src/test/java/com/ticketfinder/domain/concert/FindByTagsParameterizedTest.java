@@ -40,10 +40,10 @@ public class FindByTagsParameterizedTest {
     @ParameterizedTest
     @MethodSource("provideConcertsAndTags")
     @DirtiesContext
-    void FindByTagsTest(List<Concert> concerts, MultiValueMap<String, String> tags, List<Concert> expectedConcerts) {
+    void findByTagsTest(List<Concert> concerts, MultiValueMap<String, String> tags, List<Concert> expectedConcerts) {
         concertRepository.saveAll(concerts);
 
-        String concertsWithTagsAsString = mockMvc.perform(get("/concerts/tags").queryParams(tags))
+        String concertsWithTagsAsString = mockMvc.perform(get("/concerts").queryParams(tags))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -62,7 +62,7 @@ public class FindByTagsParameterizedTest {
 
         Concert concertWithNoTags = new ConcertBuilder().setTags(Collections.emptyList()) .build();
         Concert concertWithNoExpectedTags = new ConcertBuilder().setTags(Collections.singletonList("Pop")).build();
-        Concert concertWithTags = new ConcertBuilder().setTags(Arrays.asList("Metal", "Pogo")).build();
+        Concert concertWithTags = new ConcertBuilder().setTags(tags).build();
         Concert concertWithOneTag = new ConcertBuilder().setTags(Collections.singletonList("Metal")).build();
         Concert concertWithAdditionalTag = new ConcertBuilder().setTags(Arrays.asList("Metal", "Pogo", "Festival")).build();
 

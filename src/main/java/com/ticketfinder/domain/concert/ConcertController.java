@@ -47,7 +47,7 @@ public class ConcertController {
         concertRepository.save(concert);
     }
 
-    @GetMapping("tags")
+    @GetMapping(params = "tags")
     public List<Concert> findConcertsByTags(@RequestParam List<String> tags) {
         return getAllConcerts().stream()
                 .filter(concert -> concert.getTags().containsAll(tags))
