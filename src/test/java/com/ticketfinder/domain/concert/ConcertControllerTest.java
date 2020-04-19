@@ -3,10 +3,6 @@ package com.ticketfinder.domain.concert;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.ticketfinder.exception.NotFoundException;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.UUID;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser
-public class TicketFinderTest {
+public class ConcertControllerTest {
 
     private Faker faker = new Faker();
 
@@ -40,14 +36,8 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void getAllConcertTest() {
-        Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert(UUID.randomUUID().toString(),
-                faker.artist().name(),
-                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                faker.address().fullAddress(),
-                "Great Concert",
-                Collections.singletonList("Rock"),
-                Collections.singletonList(seat));
+        Concert concert = new ConcertBuilder().build();
+
         concertRepository.save(concert);
 
         String contentAsString = mockMvc.perform(get("/concerts"))
@@ -63,14 +53,7 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void getConcertByIdTest() {
-        Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert(UUID.randomUUID().toString(),
-                faker.artist().name(),
-                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                faker.address().fullAddress(),
-                "OK",
-                Collections.singletonList("Pop"),
-                Collections.singletonList(seat));
+        Concert concert = new ConcertBuilder().build();
         concertRepository.save(concert);
 
         String contentAsString = mockMvc.perform(get("/concerts/" + concert.getId()))
@@ -86,14 +69,8 @@ public class TicketFinderTest {
     @SneakyThrows
     @Test
     void postConcertTest() {
-        Seat seat = Seat.createSeat("normal", 350);
-        Concert concert = new Concert(UUID.randomUUID().toString(),
-                faker.artist().name(),
-                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                "Nowa Huta",
-                "OK",
-                Collections.singletonList("Pogo"),
-                Collections.singletonList(seat));
+
+        Concert concert = new ConcertBuilder().build();
         String concertAsString = objectMapper.writeValueAsString(concert);
 
         mockMvc.perform(post("/concerts").content(concertAsString)
@@ -106,18 +83,11 @@ public class TicketFinderTest {
     @Test
     void postConcertReservationTest() {
         ConcertParticipant concertParticipant = new ConcertParticipant(faker.name().firstName(), faker.name().lastName());
-        Seat seat = Seat.createSeat("GA", 400);
-        Concert concert = new Concert(UUID.randomUUID().toString(),
-                faker.artist().name(),
-                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                faker.address().fullAddress(),
-                "Nice Ice",
-                Collections.singletonList("Ice"),
-                Collections.singletonList(seat));
+        Concert concert = new ConcertBuilder().build();
         String reservationAsString = objectMapper.writeValueAsString(concertParticipant);
         concertRepository.save(concert);
 
-        mockMvc.perform(post("/concerts/" + concert.getId() + "/seats/" + seat.getId())
+        mockMvc.perform(post("/concerts/" + concert.getId() + "/seats/" + concert.getSeats().get(0).getId())
                 .content(reservationAsString)
                 .header("Content-Type", "application/json"))
                 .andExpect(status().isOk())
@@ -125,7 +95,7 @@ public class TicketFinderTest {
 
         Seat actualSeat = concertRepository.findById(concert.getId())
                 .orElseThrow(() -> new NotFoundException("Concert doesn't exist"))
-                .findSeat(seat.getId());
+                .findSeat(concert.getSeats().get(0).getId());
         assertThat(actualSeat.isReserved()).isEqualTo(true);
         assertThat(actualSeat.getConcertParticipant()).isEqualToComparingFieldByField(concertParticipant);
     }
