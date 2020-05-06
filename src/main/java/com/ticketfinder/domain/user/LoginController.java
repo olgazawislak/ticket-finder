@@ -4,6 +4,7 @@ import com.ticketfinder.exception.BadRequestException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.ticketfinder.configuration.security.SecurityConfig.*;
 
+@Log4j2
 @RestController
 public class LoginController {
 
@@ -27,6 +29,7 @@ public class LoginController {
 
     @PostMapping("login")
     public ResponseEntity<Void> login(@RequestBody CreateUserCommand createUserCommand) {
+        log.info("Input: {}", createUserCommand.getEmail());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(createUserCommand.getEmail(),
                 createUserCommand.getPassword());
 
