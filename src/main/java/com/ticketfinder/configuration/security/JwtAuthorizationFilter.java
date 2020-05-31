@@ -1,5 +1,6 @@
 package com.ticketfinder.configuration.security;
 
+import com.ticketfinder.domain.user.JwtBlacklistRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -19,6 +20,8 @@ import static com.ticketfinder.configuration.security.SecurityConfig.JWT_SECRET;
 import static com.ticketfinder.configuration.security.SecurityConfig.TOKEN_HEADER;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+
+    private JwtBlacklistRepository jwtBlacklistRepository;
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -40,7 +43,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(TOKEN_HEADER);
-        if (StringUtils.isNotEmpty(token)) {
+        if (StringUtils.isNotEmpty(token) && jwtBlacklistRepository.existsById(token)) {
 
             byte[] signingKey = JWT_SECRET.getBytes();
 
