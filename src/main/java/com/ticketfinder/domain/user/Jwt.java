@@ -11,4 +11,5 @@ import org.springframework.data.annotation.Id;
 public class Jwt {
     @Id
     private String token;
+
 }
