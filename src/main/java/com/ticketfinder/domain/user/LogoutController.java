@@ -15,9 +15,9 @@ public class LogoutController {
         this.jwtBlacklistRepository = jwtBlacklistRepository;
     }
 
-    @PostMapping("logout")
+    @PostMapping("sign-out")
     public void logout(@RequestHeader("Authorization") String headerValue) {
-        Jwt jwtHeaderValue = new Jwt(headerValue);
+        Token jwtHeaderValue = new Token(headerValue);
         jwtBlacklistRepository.insert(jwtHeaderValue);
     }
 }

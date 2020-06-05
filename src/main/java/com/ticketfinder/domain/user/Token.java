@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Jwt {
+public class Token {
     @Id
     private String token;
 
