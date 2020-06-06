@@ -21,11 +21,13 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationProvider authenticationProvider;
 
     @Autowired
-    public CustomWebSecurityConfigurer(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public CustomWebSecurityConfigurer(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, AuthenticationProvider authenticationProvider) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationProvider = authenticationProvider;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         )
                 .cors()
                 .and().csrf().disable()
-                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), authenticationProvider))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

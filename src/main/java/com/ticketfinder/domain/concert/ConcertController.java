@@ -1,5 +1,6 @@
 package com.ticketfinder.domain.concert;
 
+import com.ticketfinder.domain.user.JwtBlacklistRepository;
 import com.ticketfinder.exception.NotFoundException;
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class ConcertController {
 
     private ConcertRepository concertRepository;
+    private JwtBlacklistRepository jwtBlacklistRepository;
 
     @Autowired
     public ConcertController(ConcertRepository concertRepository) {
@@ -41,7 +43,7 @@ public class ConcertController {
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
     public void postConcert(@RequestBody Concert concert) {
-        log.info("Input: {}", concert );
+        log.info("Input: {}", concert);
         concertRepository.insert(concert);
         log.info("Output: Empty");
 
