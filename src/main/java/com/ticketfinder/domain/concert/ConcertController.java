@@ -7,6 +7,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +38,10 @@ public class ConcertController {
     @GetMapping()
     public List<Concert> getAllConcerts() {
         log.info("Input: Empty");
-        List<Concert> concerts = concertRepository.findAll();
+        Pageable pageable = PageRequest.of(0,15);
+        Page<Concert> concerts = concertRepository.findAll(pageable);
         log.info("Output: {}", concerts);
-        return concerts;
+        return concerts.getContent();
     }
 
     @PostMapping()
