@@ -36,6 +36,7 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.authorizeRequests(authorize -> authorize
                 .mvcMatchers("login").permitAll()
                 .mvcMatchers("users").permitAll()
+                .mvcMatchers("concerts").permitAll()
                 .anyRequest().authenticated()
         )
                 .cors()
