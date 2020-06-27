@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +35,11 @@ public class ConcertController {
     }
 
     @GetMapping()
-    public List<Concert> getAllConcerts() {
+    public List<Concert> getAllConcerts(Pageable pageable) {
         log.info("Input: Empty");
-        List<Concert> concerts = concertRepository.findAll();
-        log.info("Output: {}", concerts);
-        return concerts;
+        Page<Concert> concerts = concertRepository.findAll(pageable);
+        log.info("Output: {}", concerts.getContent());
+        return concerts.getContent();
     }
 
     @PostMapping()
@@ -63,9 +65,9 @@ public class ConcertController {
     }
 
     @GetMapping(params = "tags")
-    public List<Concert> findConcertsByTags(@RequestParam List<String> tags) {
+    public List<Concert> findConcertsByTags(@RequestParam List<String> tags, Pageable pageable) {
         log.info("Input: {}", tags);
-        List<Concert> concertsWithTags = getAllConcerts().stream()
+        List<Concert> concertsWithTags = getAllConcerts(pageable).stream()
                 .filter(concert -> concert.getTags().containsAll(tags))
                 .collect(Collectors.toList());
         log.info("Output: {}", concertsWithTags);

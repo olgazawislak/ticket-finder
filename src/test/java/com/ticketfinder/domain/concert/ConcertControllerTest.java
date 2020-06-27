@@ -3,7 +3,9 @@ package com.ticketfinder.domain.concert;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.ticketfinder.exception.NotFoundException;
+import java.util.Arrays;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class ConcertControllerTest {
 
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,9 +35,14 @@ public class ConcertControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @BeforeEach
+    void cleanRepository() {
+        concertRepository.deleteAll();
+    }
+
     @SneakyThrows
     @Test
-    void getAllConcertTest() {
+    void getAllConcertsTest() {
         Concert concert = new ConcertBuilder().build();
 
         concertRepository.save(concert);
@@ -48,6 +55,44 @@ public class ConcertControllerTest {
 
         Concert[] concerts = objectMapper.readValue(contentAsString, Concert[].class);
         assertThat(concerts).containsOnly(concert);
+    }
+
+    @SneakyThrows
+    @Test
+    void getAllConcertsPaginationTest() {
+        Concert concert1 = new ConcertBuilder().build();
+        Concert concert2 = new ConcertBuilder().build();
+        Concert concert3 = new ConcertBuilder().build();
+
+        concertRepository.saveAll(Arrays.asList(concert1,concert2,concert3));
+
+        String contentAsString = mockMvc.perform(get("/concerts" + "?page=0&size=2"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Concert[] concerts = objectMapper.readValue(contentAsString, Concert[].class);
+        assertThat(concerts).containsOnly(concert1,concert2);
+    }
+
+    @SneakyThrows
+    @Test
+    void getConcertsFromNextPageTest() {
+        Concert concert1 = new ConcertBuilder().build();
+        Concert concert2 = new ConcertBuilder().build();
+        Concert concert3 = new ConcertBuilder().build();
+
+        concertRepository.saveAll(Arrays.asList(concert1,concert2,concert3));
+
+        String contentAsString = mockMvc.perform(get("/concerts" + "?page=1&size=2"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Concert[] concerts = objectMapper.readValue(contentAsString, Concert[].class);
+        assertThat(concerts).containsOnly(concert3);
     }
 
     @SneakyThrows
