@@ -38,7 +38,7 @@ public class ConcertController {
     public List<Concert> getAllConcerts(Pageable pageable) {
         log.info("Input: Empty");
         Page<Concert> concerts = concertRepository.findAll(pageable);
-        log.info("Output: {}", concerts);
+        log.info("Output: {}", concerts.getContent());
         return concerts.getContent();
     }
 
